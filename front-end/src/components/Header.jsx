@@ -1,19 +1,16 @@
-
 import React from "react";
 import logo from "./image.png";
-import{ Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const Header = () => {
+const Header = ({ user }) => {
+  console.log(user);
   return (
     <header className="shadow-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-4 sm:px-8">
-
         {/* Logo */}
         <Link to="/" className="flex items-center">
           <img className="h-10" src={logo} alt="Logo" />
-          <p className="text-primary-400 text-2xl font-bold">
-            Nivora
-          </p>
+          <p className="text-primary-400 text-2xl font-bold">Nivora</p>
         </Link>
 
         {/* Barra de pesquisa */}
@@ -21,13 +18,9 @@ const Header = () => {
           to="/"
           className="hidden items-center rounded-full border border-gray-300 py-2 pr-4 pl-6 shadow-md lg:flex"
         >
-          <p className="border-r border-r-gray-300 pr-4">
-            Qualquer lugar
-          </p>
+          <p className="border-r border-r-gray-300 pr-4">Qualquer lugar</p>
 
-          <p className="border-r border-r-gray-300 px-4">
-            Qualquer semana
-          </p>
+          <p className="border-r border-r-gray-300 px-4">Qualquer semana</p>
 
           <p className="px-4">Hóspedes</p>
 
@@ -50,7 +43,10 @@ const Header = () => {
         </Link>
 
         {/* Menu  do usuário */}
-        <Link to='/login' className="flex items-center gap-2 rounded-full border border-gray-300 py-2 pr-4 pl-6 shadow-md">
+        <Link
+          to={user ? "account":"/login"}
+          className="flex items-center gap-2 rounded-full border border-gray-300 py-2 pr-4 pl-6 shadow-md"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -77,11 +73,12 @@ const Header = () => {
             />
           </svg>
 
-          <p className="max-w-20 truncate sm:max-w-32">
-            Emilly XYZ
-          </p>
+          {user ? (
+            <p className="max-w-20 truncate sm:max-w-32">{user.name}</p>
+          ) : (
+            <></>
+          )}
         </Link>
-
       </div>
     </header>
   );
