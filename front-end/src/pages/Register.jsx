@@ -11,9 +11,10 @@ const Register = ({ setUser }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-  /*  if (email && password) {
+    if (email && password && name) {
       try {
-        const { data: userDoc } = await axios.post("/users/login", {
+        const { data: userDoc } = await axios.post("/users/", {
+            name,
           email,
           password,
         });
@@ -21,11 +22,11 @@ const Register = ({ setUser }) => {
         setUser(userDoc);
         setriderect(true);
       } catch (error) {
-        alert(`deu erro a logar :${error.response.data}`);
+        alert(`deu erro a cadastrar :${JSON.stringify(error)}`);
       }
     } else {
-      alert("voce precisar colocar o email e senha");
-    }*/
+      alert("voce precisar colocar o email, nome e senha");
+    }
   };
 
   if (riderect) return <Navigate to = "/"/>
