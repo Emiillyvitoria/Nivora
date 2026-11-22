@@ -22,24 +22,20 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/profile", async (req, res) => {
-
   const{token} = req.cookies;
 
   if (token){
+    
+      jwt.verify(token,JWT_SECRET_KEY,{}, (error,userInfo)=>{
+if (error)throw error;
 
-    try {
-      const userInfo= jwt.verify(token,JWT_SECRET_KEY);
-  
-      res.json(userInfo);
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  }
-  else{
+  res.json(userInfo);
+});
+       
+ } else{
     res.json(null);
   }
 });
-
 
 router.post("/", async (req, res) => {
   const { name, email, password } = req.body;
@@ -52,13 +48,16 @@ router.post("/", async (req, res) => {
     });
 
     const {_id} = newUserDoc;
-   
-      const newUserObj={name,email,_id};
+    const newUserObj={name,email,_id};
 
-    const token = jwt.sign(newUserObj, JWT_SECRET_KEY);
-    res.json(newUserObj);
+     jwt.sign(newUserObj, JWT_SECRET_KEY,{},(error,token)=>{
+      if(error)throw error;
+      res.cookie("token",token).json(newUserObj);
+    });
+    
   } catch (error) {
     res.status(500).json(error);
+    throw error;
   }
 });
 
