@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useParams, useRouteLoaderData } from "react-router-dom";
 import AccProfile from "../components/AccProfile";
 
-const Account = ({user}) => {
+const Account = () => {
     const {subpage} = useParams();
     const buttonClass=(button) =>{
         let finalClass="hover:bg-primary-400 cursor-pointer rounded-full px-4 py-2 transition hover:text-white";
@@ -18,7 +18,7 @@ const Account = ({user}) => {
           <Link to="/account/places" className={buttonClass("places")}>Lugares</Link>
         </div>
 
-      {subpage==="profile" && <AccProfile user={user}/> } 
+      {subpage==="profile" && <AccProfile /> } 
       </div>
     </section>
   );

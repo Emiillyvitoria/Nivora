@@ -87,4 +87,8 @@ router.post("/login", async (req, res) => {
     res.status(500).json(error);
   }
 });
+
+router.post("/logout", (req,res) => {
+  res.clearCookie("token").json("Deslogadoo com sucesso");
+})
 export default router;

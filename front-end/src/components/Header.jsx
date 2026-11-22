@@ -1,8 +1,10 @@
 import React from "react";
 import logo from "./image.png";
 import { Link } from "react-router-dom";
+import { useUserContext } from "../contexts/UserContext";
 
-const Header = ({ user }) => {
+const Header = () => {
+  const {user}=useUserContext();
   console.log(user);
   return (
     <header className="shadow-md">
