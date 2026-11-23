@@ -3,7 +3,7 @@ import { Router } from "express";
 import { connectDb } from "../../config/db.js";
 import User from "./model.js";
 import bcrypt from "bcryptjs";
-import jwr from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const router = Router();
 const bcryptSalt = bcrypt.genSaltSync();
@@ -22,17 +22,15 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/profile", async (req, res) => {
-  const{token} = req.cookies;
+  const { token } = req.cookies;
 
-  if (token){
-    
-      jwt.verify(token,JWT_SECRET_KEY,{}, (error,userInfo)=>{
-if (error)throw error;
+  if (token) {
+    jwt.verify(token, JWT_SECRET_KEY, {}, (error, userInfo) => {
+      if (error) throw error;
 
-  res.json(userInfo);
-});
-       
- } else{
+      res.json(userInfo);
+    });
+  } else {
     res.json(null);
   }
 });
@@ -47,14 +45,13 @@ router.post("/", async (req, res) => {
       password: encryptedPassword,
     });
 
-    const {_id} = newUserDoc;
-    const newUserObj={name,email,_id};
+    const { _id } = newUserDoc;
+    const newUserObj = { name, email, _id };
 
-     jwt.sign(newUserObj, JWT_SECRET_KEY,{},(error,token)=>{
-      if(error)throw error;
-      res.cookie("token",token).json(newUserObj);
+    jwt.sign(newUserObj, JWT_SECRET_KEY, {}, (error, token) => {
+      if (error) throw error;
+      res.cookie("token", token).json(newUserObj);
     });
-    
   } catch (error) {
     res.status(500).json(error);
     throw error;
@@ -73,10 +70,20 @@ router.post("/login", async (req, res) => {
 
       if (passwordCorrect) {
         const newUserObj = { name, email, _id };
-        const token = jwt.sign(newUserObj, JWT_SECRET_KEY);
+        const token = jwt.sign(
+          newUserObj,
+          JWT_SECRET_KEY,
+          {},
+          (error, token) => {
+              if (error){
+                console.error(error);
+                        res.status(500).json(error);
+                    return;
+              }
 
-     
-        res.cookie("token",token).json(newUserObj);
+            res.cookie("token", token).json(newUserObj);
+          },
+        );
       } else {
         res.status(400).json("senha ivalida");
       }
@@ -88,7 +95,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/logout", (req,res) => {
+router.post("/logout", (req, res) => {
   res.clearCookie("token").json("Deslogadoo com sucesso");
-})
+});
 export default router;
